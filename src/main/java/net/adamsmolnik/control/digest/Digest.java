@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.xml.bind.DatatypeConverter;
@@ -33,6 +34,11 @@ public class Digest {
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    public long getObjectSize(String objectKey) {
+        Map<String, String> md = entityProvider.getMetadata(new EntityReference(objectKey));
+        return Long.valueOf(md.get("contentLength"));
     }
 
     private InputStream getInputStream(String objectKey) throws IOException {
